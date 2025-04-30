@@ -69,9 +69,10 @@ export function ServiceCard({ id, title, description, price, category, slug, ima
 
         <div className="p-6 pt-0 mt-auto">
           <div className="flex justify-between items-center">
-          <span className="text-zafran-500 font-bold">
-            {price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
-          </span>
+            <span className="text-zafran-500 font-bold">
+              {price.toLocaleString('fr-FR', { style: 'currency', currency: 'MAD' })}
+             </span>
+
             <Link
                 to={`/services/${slug}`}
                 className="text-spice-600 font-medium hover:text-spice-800 transition-colors duration-200"
