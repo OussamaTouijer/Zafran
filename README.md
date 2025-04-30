@@ -12,9 +12,6 @@ Frontend de la plateforme **Zafran**, dédiée à la valorisation de la cuisine 
 - 🧩 UI : Radix UI + shadcn/ui + Tailwind CSS
 - 🔁 API : React Query + Zod
 - 📦 Formulaires : React Hook Form
-- 📊 Graphiques : Recharts
-- 🌗 Thèmes : next-themes
-- 🧪 Validation : Zod
 
 ## 🔧 Scripts
 - `npm run dev` – démarrage en mode dev
