@@ -6,6 +6,34 @@ export interface ServiceDescription {
   children: Array<{ type: string; text: string }>;
 }
 
+export interface ServiceImage {
+  id: number;
+  documentId: string;
+  name: string;
+  alternativeText: string | null;
+  caption: string | null;
+  width: number;
+  height: number;
+  formats: {
+    thumbnail?: {
+      url: string;
+      width: number;
+      height: number;
+    };
+  };
+  hash: string;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
+  previewUrl: string | null;
+  provider: string;
+  provider_metadata: any;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
 export interface Service {
   id: number;
   documentId: string;
@@ -17,6 +45,7 @@ export interface Service {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
+  image?: ServiceImage;
 }
 
 export interface ServiceResponse {
@@ -36,8 +65,8 @@ export const useServices = () => {
   return useQuery({
     queryKey: ['services'],
     queryFn: async (): Promise<ServiceResponse> => {
-      // Pour le moment, on utilise localhost pour les tests
-      const response = await fetch('http://localhost:1337/api/services');
+      // Mise à jour pour inclure les images
+      const response = await fetch('http://localhost:1337/api/services?populate=image');
       if (!response.ok) {
         throw new Error('Erreur lors de la récupération des services');
       }
@@ -98,3 +127,7 @@ export const useMenus = () => {
     },
   });
 };
+
+
+
+
