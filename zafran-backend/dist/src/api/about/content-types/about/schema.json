@@ -1,0 +1,28 @@
+{
+    "kind": "singleType",
+    "collectionName": "abouts",
+    "info": {
+        "singularName": "about",
+        "pluralName": "abouts",
+        "displayName": "About"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "history": {
+            "type": "blocks"
+        },
+        "Team_Member": {
+            "displayName": "Catégorie",
+            "type": "component",
+            "repeatable": false,
+            "component": "team.categorie"
+        },
+        "team": {
+            "type": "component",
+            "repeatable": true,
+            "component": "team.categorie"
+        }
+    }
+}

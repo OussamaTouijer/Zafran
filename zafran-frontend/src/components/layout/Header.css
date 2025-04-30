@@ -1,0 +1,6 @@
+.limg {
+    width: 84px;
+    height: 87px;
+    transition: transform 0.1ms ease-in-out;
+    margin: 20px;
+}

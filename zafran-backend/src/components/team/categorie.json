@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_team_categories",
+  "info": {
+    "displayName": "Catégorie"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "role": {
+      "type": "string"
+    }
+  }
+}

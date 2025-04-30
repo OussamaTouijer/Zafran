@@ -1,0 +1,170 @@
+/* Footer.css */
+
+:root {
+    --primary-color: #cdaa7d; /* Couleur dorée/marocaine */
+    --text-color: #333333;
+    --background-color: #f8f8f8;
+    --hover-transition: all 0.3s ease;
+}
+
+.footer {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 4rem 2rem 2rem;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+/* Section principale */
+.footer .grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+}
+
+/* Logo */
+.logo-img {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 1.5rem;
+    transition: opacity 0.3s ease;
+}
+
+.logo-img:hover {
+    opacity: 0.9;
+}
+
+/* Description */
+.description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    max-width: 400px;
+}
+
+/* Liens sociaux */
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: var(--hover-transition);
+}
+
+.social-links a:hover {
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.social-links .fab {
+    font-size: 1.2rem;
+}
+
+/* Sections de liens */
+.footer-link-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+    color: var(--primary-color);
+    text-transform: uppercase;
+}
+
+.footer-quick-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-quick-links a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--hover-transition);
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.footer-quick-links a:hover {
+    color: var(--primary-color);
+}
+
+.footer-quick-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.footer-quick-links a:hover::after {
+    width: 100%;
+}
+
+/* Section contact */
+address p {
+    margin-bottom: 0.6rem;
+}
+
+address a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--hover-transition);
+}
+
+address a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Copyright */
+.copyright {
+    color: #666;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Liens juridiques */
+.footer-quick-links[aria-label="Liens juridiques"] a {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.footer-quick-links[aria-label="Liens juridiques"] a:hover {
+    color: var(--primary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer {
+        padding: 3rem 1.5rem;
+    }
+
+    .logo-img {
+        max-width: 160px;
+    }
+
+    .grid {
+        gap: 2rem;
+    }
+
+    .footer-link-title {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-links {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .footer-quick-links[aria-label="Liens juridiques"] {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}
