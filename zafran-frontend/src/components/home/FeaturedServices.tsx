@@ -53,6 +53,12 @@ export function FeaturedServices() {
               Voir tous nos services
             </a>
           </div>
+
+          <div className="mt-12 text-center">
+            <a href="/admin" className="btn-primary">
+              Administration
+            </a>
+          </div>
         </div>
       </section>
   );
