@@ -106,7 +106,7 @@ export const useHome = () => {
   return useQuery({
     queryKey: ['home'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:1337/api/home');
+      const response = await fetch('http://localhost:1337/api/home?populate=image');
       if (!response.ok) {
         throw new Error('Erreur lors de la récupération des données home');
       }
@@ -115,18 +115,6 @@ export const useHome = () => {
   });
 };
 
-export const useMenus = () => {
-  return useQuery({
-    queryKey: ['menus'],
-    queryFn: async () => {
-      const response = await fetch('http://localhost:1337/api/menus');
-      if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des menus');
-      }
-      return response.json();
-    },
-  });
-};
 
 
 

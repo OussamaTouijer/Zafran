@@ -10,10 +10,10 @@ export function AboutPreview() {
             <div className="order-2 md:order-1">
               <h2 className="section-title mb-6">Notre Histoire</h2>
               <p className="text-gray-700 mb-6">
-                Fondée en 2015 par le Chef Oussama Touijer, Zafran est née d’une volonté de sublimer la cuisine marocaine à travers une plateforme moderne et accessible. Après plus de 15 ans d'expérience dans des restaurants étoilés en France et à l’international, le Chef a voulu créer un lien entre tradition et innovation, entre les saveurs ancestrales du Maroc et les exigences d’une gastronomie contemporaine.
+                Fondée en 2015 par le Chef Oussama Touijer, Zafran est née d’une volonté de sublimer la cuisine marocaine à travers une plateforme à la fois moderne et accessible. Fort de plus de 15 ans d’expérience dans des restaurants étoilés en France et à l’international, le Chef a souhaité créer un lien entre tradition et innovation, entre les saveurs ancestrales du Maroc et les exigences de la gastronomie contemporaine.
               </p>
               <p className="text-gray-700 mb-8">
-                Zafran, nom inspiré de l’épice la plus noble et la plus emblématique du royaume, symbolise la richesse, la finesse et l’authenticité. Comme le safran, chaque plat que nous proposons est rare, précieux et travaillé avec passion.
+                Zafran, un nom inspiré de l’épice la plus noble et emblématique du royaume, symbolise la richesse, la finesse et l’authenticité. À l’image du safran, chaque plat que nous proposons est rare, précieux et élaboré avec passion.
               </p>
               <Link to="/about" className="btn-primary">
                 En savoir plus <ArrowRight className="ml-1 h-4 w-4" />
