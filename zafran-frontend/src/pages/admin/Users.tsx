@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
@@ -26,53 +25,12 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: "admin" | "client";
-  status: "active" | "inactive";
-  dateCreated: string;
-}
-
-const mockUsers: User[] = [
-  {
-    id: "1",
-    name: "Ahmed Benali",
-    email: "ahmed@example.com",
-    role: "admin",
-    status: "active",
-    dateCreated: "2025-03-15"
-  },
-  {
-    id: "2",
-    name: "Fatima Chakir",
-    email: "fatima@example.com",
-    role: "client",
-    status: "active",
-    dateCreated: "2025-04-01"
-  },
-  {
-    id: "3",
-    name: "Karim El Mansouri",
-    email: "karim@example.com",
-    role: "client",
-    status: "inactive",
-    dateCreated: "2025-04-10"
-  },
-  {
-    id: "4",
-    name: "Samira Tazi",
-    email: "samira@example.com",
-    role: "client",
-    status: "active",
-    dateCreated: "2025-04-15"
-  }
-];
+import { useUsers, createUser, updateUser, deleteUser, User } from "@/services/api";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Users = () => {
-  const [users, setUsers] = useState<User[]>(mockUsers);
+  const queryClient = useQueryClient();
+  const { data: usersResponse, isLoading } = useUsers();
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -81,9 +39,10 @@ const Users = () => {
     name: "",
     email: "",
     role: "client",
-    status: "active"
+    statu: "active"
   });
 
+  const users = usersResponse?.data || [];
   const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -94,43 +53,59 @@ const Users = () => {
     setIsEditDialogOpen(true);
   };
 
-  const handleDeleteUser = (userId: string) => {
+  const handleDeleteUser = async (documentId: string) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
-      setUsers(users.filter(user => user.id !== userId));
-      toast.success("Utilisateur supprimé avec succès");
+      try {
+        await deleteUser(documentId);
+        await queryClient.invalidateQueries({ queryKey: ['users'] });
+        toast.success("Utilisateur supprimé avec succès");
+      } catch (error) {
+        toast.error("Erreur lors de la suppression de l'utilisateur");
+      }
     }
   };
 
-  const handleUpdateUser = () => {
+  const handleUpdateUser = async () => {
     if (!currentUser) return;
     
-    setUsers(users.map(user => 
-      user.id === currentUser.id ? currentUser : user
-    ));
-    setIsEditDialogOpen(false);
-    toast.success("Utilisateur mis à jour avec succès");
+    try {
+      const userData = {
+        name: currentUser.name,
+        email: currentUser.email,
+        role: currentUser.role,
+        statu: currentUser.statu,
+        dateCreated: currentUser.dateCreated
+      };
+      
+      await updateUser(currentUser.documentId, userData);
+      await queryClient.invalidateQueries({ queryKey: ['users'] });
+      setIsEditDialogOpen(false);
+      toast.success("Utilisateur mis à jour avec succès");
+    } catch (error) {
+      toast.error("Erreur lors de la mise à jour de l'utilisateur");
+    }
   };
 
-  const handleAddUser = () => {
-    const user: User = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: newUser.name || "",
-      email: newUser.email || "",
-      role: newUser.role as "admin" | "client" || "client",
-      status: newUser.status as "active" | "inactive" || "active",
-      dateCreated: new Date().toISOString().split("T")[0]
-    };
-    
-    setUsers([...users, user]);
-    setNewUser({
-      name: "",
-      email: "",
-      role: "client",
-      status: "active"
-    });
-    setIsAddDialogOpen(false);
-    toast.success("Utilisateur ajouté avec succès");
+  const handleAddUser = async () => {
+    try {
+      await createUser(newUser);
+      await queryClient.invalidateQueries({ queryKey: ['users'] });
+      setNewUser({
+        name: "",
+        email: "",
+        role: "client",
+        statu: "active"
+      });
+      setIsAddDialogOpen(false);
+      toast.success("Utilisateur ajouté avec succès");
+    } catch (error) {
+      toast.error("Erreur lors de l'ajout de l'utilisateur");
+    }
   };
+
+  if (isLoading) {
+    return <div>Chargement...</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -182,8 +157,8 @@ const Users = () => {
                 <div className="grid gap-2">
                   <label htmlFor="status">Statut</label>
                   <Select 
-                    value={newUser.status} 
-                    onValueChange={(value) => setNewUser({...newUser, status: value as "active" | "inactive"})}
+                    value={newUser.statu} 
+                    onValueChange={(value) => setNewUser({...newUser, statu: value as "active" | "inactive"})}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Sélectionner un statut" />
@@ -228,7 +203,7 @@ const Users = () => {
           </TableHeader>
           <TableBody>
             {filteredUsers.map((user) => (
-              <TableRow key={user.id}>
+              <TableRow key={user.documentId}>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
@@ -243,7 +218,7 @@ const Users = () => {
                   )}
                 </TableCell>
                 <TableCell>
-                  {user.status === "active" ? (
+                  {user.statu === "active" ? (
                     <span className="px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
                       Actif
                     </span>
@@ -253,13 +228,13 @@ const Users = () => {
                     </span>
                   )}
                 </TableCell>
-                <TableCell>{user.dateCreated}</TableCell>
+                <TableCell>{user.dateCreated || user.createdAt.split('T')[0]}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
                     <Button variant="outline" size="sm" onClick={() => handleEditUser(user)}>
                       Modifier
                     </Button>
-                    <Button variant="destructive" size="sm" onClick={() => handleDeleteUser(user.id)}>
+                    <Button variant="destructive" size="sm" onClick={() => handleDeleteUser(user.documentId)}>
                       Supprimer
                     </Button>
                   </div>
@@ -312,8 +287,8 @@ const Users = () => {
               <div className="grid gap-2">
                 <label htmlFor="edit-status">Statut</label>
                 <Select 
-                  value={currentUser?.status} 
-                  onValueChange={(value) => setCurrentUser(currentUser ? {...currentUser, status: value as "active" | "inactive"} : null)}
+                  value={currentUser?.statu} 
+                  onValueChange={(value) => setCurrentUser(currentUser ? {...currentUser, statu: value as "active" | "inactive"} : null)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner un statut" />

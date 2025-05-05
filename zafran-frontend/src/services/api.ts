@@ -1,4 +1,3 @@
-
 import { useQuery } from '@tanstack/react-query';
 
 export interface ServiceDescription {
@@ -113,6 +112,93 @@ export const useHome = () => {
       return response.json();
     },
   });
+};
+
+export interface User {
+  id: number;
+  documentId: string;
+  name: string;
+  email: string;
+  role: "admin" | "client";
+  statu: "active" | "inactive";
+  dateCreated: string | null;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface UsersResponse {
+  data: User[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+// Fonction pour récupérer tous les utilisateurs
+export const useUsers = () => {
+  return useQuery({
+    queryKey: ['users'],
+    queryFn: async (): Promise<UsersResponse> => {
+      const response = await fetch('http://localhost:1337/api/clients');
+      if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des utilisateurs');
+      }
+      return response.json();
+    },
+  });
+};
+
+// Fonction pour créer un nouvel utilisateur
+export const createUser = async (userData: Partial<User>): Promise<User> => {
+  const response = await fetch('http://localhost:1337/api/clients', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data: userData }),
+  });
+  if (!response.ok) {
+    throw new Error('Erreur lors de la création de l\'utilisateur');
+  }
+  return response.json();
+};
+
+// Fonction pour mettre à jour un utilisateur
+export const updateUser = async (documentId: string, userData: Partial<User>): Promise<User> => {
+  const response = await fetch(`http://localhost:1337/api/clients/${documentId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      data: {
+        name: userData.name,
+        email: userData.email,
+        role: userData.role,
+        statu: userData.statu,
+        dateCreated: userData.dateCreated
+      }
+    }),
+  });
+  if (!response.ok) {
+    throw new Error('Erreur lors de la mise à jour de l\'utilisateur');
+  }
+  return response.json();
+};
+
+// Fonction pour supprimer un utilisateur
+export const deleteUser = async (documentId: string): Promise<void> => {
+  const response = await fetch(`http://localhost:1337/api/clients/${documentId}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('Erreur lors de la suppression de l\'utilisateur');
+  }
 };
 
 
