@@ -11,12 +11,34 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "name": {
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "prenom": {
       "type": "string",
       "required": true
     },
     "email": {
       "type": "email",
+      "required": true
+    },
+    "password": {
+      "type": "password",
+      "required": true,
+      "private": true,
+      "minLength": 6
+    },
+    "telephone": {
+      "type": "string",
+      "required": true
+    },
+    "address": {
+      "type": "string",
+      "required": true
+    },
+    "ville": {
+      "type": "string",
       "required": true
     },
     "role": {

@@ -117,7 +117,6 @@ export const useHome = () => {
 export interface User {
   id: number;
   documentId: string;
-  name: string;
   email: string;
   role: "admin" | "client";
   statu: "active" | "inactive";
@@ -125,6 +124,12 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
+  nom: string | null;
+  prenom: string | null;
+  telephone: string | null;
+  address: string | null;
+  ville: string | null;
+  password?: string;
 }
 
 export interface UsersResponse {
@@ -177,8 +182,12 @@ export const updateUser = async (documentId: string, userData: Partial<User>): P
     },
     body: JSON.stringify({
       data: {
-        name: userData.name,
+        nom: userData.nom,
+        prenom: userData.prenom,
         email: userData.email,
+        telephone: userData.telephone,
+        address: userData.address,
+        ville: userData.ville,
         role: userData.role,
         statu: userData.statu,
         dateCreated: userData.dateCreated
@@ -198,6 +207,38 @@ export const deleteUser = async (documentId: string): Promise<void> => {
   });
   if (!response.ok) {
     throw new Error('Erreur lors de la suppression de l\'utilisateur');
+  }
+};
+
+// Fonction pour vérifier si un email existe déjà
+export const checkEmailExists = async (email: string): Promise<boolean> => {
+  const response = await fetch(`http://localhost:1337/api/clients?filters[email][$eq]=${email}`);
+  if (!response.ok) {
+    throw new Error('Erreur lors de la vérification de l\'email');
+  }
+  const data = await response.json();
+  return data.data.length > 0;
+};
+
+// Fonction pour vérifier les identifiants de connexion
+export const checkLoginCredentials = async (email: string, password: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`http://localhost:1337/api/clients?filters[email][$eq]=${email}`);
+    if (!response.ok) {
+      throw new Error('Erreur lors de la vérification des identifiants');
+    }
+    const data = await response.json();
+    
+    if (data.data.length === 0) {
+      return false; // L'utilisateur n'existe pas
+    }
+
+    // Note: Dans un environnement de production, la vérification du mot de passe
+    // devrait être faite côté serveur de manière sécurisée
+    const user = data.data[0];
+    return user.statu === "active"; // Vérifie si le compte est actif
+  } catch (error) {
+    throw new Error('Erreur lors de la vérification des identifiants');
   }
 };
 

@@ -36,16 +36,21 @@ const Users = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [newUser, setNewUser] = useState<Partial<User>>({
-    name: "",
+    nom: "",
+    prenom: "",
     email: "",
+    telephone: "",
+    address: "",
+    ville: "",
     role: "client",
     statu: "active"
   });
 
   const users = usersResponse?.data || [];
   const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    (user.nom?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    user.prenom?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleEditUser = (user: User) => {
@@ -70,8 +75,12 @@ const Users = () => {
     
     try {
       const userData = {
-        name: currentUser.name,
+        nom: currentUser.nom,
+        prenom: currentUser.prenom,
         email: currentUser.email,
+        telephone: currentUser.telephone,
+        address: currentUser.address,
+        ville: currentUser.ville,
         role: currentUser.role,
         statu: currentUser.statu,
         dateCreated: currentUser.dateCreated
@@ -91,8 +100,12 @@ const Users = () => {
       await createUser(newUser);
       await queryClient.invalidateQueries({ queryKey: ['users'] });
       setNewUser({
-        name: "",
+        nom: "",
+        prenom: "",
         email: "",
+        telephone: "",
+        address: "",
+        ville: "",
         role: "client",
         statu: "active"
       });
@@ -123,11 +136,19 @@ const Users = () => {
             <div className="space-y-4 py-4">
               <div className="grid gap-4">
                 <div className="grid gap-2">
-                  <label htmlFor="name">Nom complet</label>
+                  <label htmlFor="nom">Nom</label>
                   <Input 
-                    id="name" 
-                    value={newUser.name} 
-                    onChange={e => setNewUser({...newUser, name: e.target.value})}
+                    id="nom" 
+                    value={newUser.nom} 
+                    onChange={e => setNewUser({...newUser, nom: e.target.value})}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <label htmlFor="prenom">Prénom</label>
+                  <Input 
+                    id="prenom" 
+                    value={newUser.prenom} 
+                    onChange={e => setNewUser({...newUser, prenom: e.target.value})}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -140,7 +161,31 @@ const Users = () => {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <label htmlFor="role">Role</label>
+                  <label htmlFor="telephone">Téléphone</label>
+                  <Input 
+                    id="telephone" 
+                    value={newUser.telephone} 
+                    onChange={e => setNewUser({...newUser, telephone: e.target.value})}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <label htmlFor="address">Adresse</label>
+                  <Input 
+                    id="address" 
+                    value={newUser.address} 
+                    onChange={e => setNewUser({...newUser, address: e.target.value})}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <label htmlFor="ville">Ville</label>
+                  <Input 
+                    id="ville" 
+                    value={newUser.ville} 
+                    onChange={e => setNewUser({...newUser, ville: e.target.value})}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <label htmlFor="role">Rôle</label>
                   <Select 
                     value={newUser.role} 
                     onValueChange={(value) => setNewUser({...newUser, role: value as "admin" | "client"})}
@@ -194,7 +239,10 @@ const Users = () => {
           <TableHeader>
             <TableRow>
               <TableHead>Nom</TableHead>
+              <TableHead>Prénom</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Téléphone</TableHead>
+              <TableHead>Ville</TableHead>
               <TableHead>Rôle</TableHead>
               <TableHead>Statut</TableHead>
               <TableHead>Date d'inscription</TableHead>
@@ -204,8 +252,11 @@ const Users = () => {
           <TableBody>
             {filteredUsers.map((user) => (
               <TableRow key={user.documentId}>
-                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.nom || "-"}</TableCell>
+                <TableCell>{user.prenom || "-"}</TableCell>
                 <TableCell>{user.email}</TableCell>
+                <TableCell>{user.telephone || "-"}</TableCell>
+                <TableCell>{user.ville || "-"}</TableCell>
                 <TableCell>
                   {user.role === "admin" ? (
                     <span className="px-2 py-1 rounded-full bg-purple-100 text-purple-800 text-xs font-medium">
@@ -253,11 +304,19 @@ const Users = () => {
           <div className="space-y-4 py-4">
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <label htmlFor="edit-name">Nom complet</label>
+                <label htmlFor="edit-nom">Nom</label>
                 <Input 
-                  id="edit-name" 
-                  value={currentUser?.name} 
-                  onChange={e => setCurrentUser(currentUser ? {...currentUser, name: e.target.value} : null)}
+                  id="edit-nom" 
+                  value={currentUser?.nom || ""} 
+                  onChange={e => setCurrentUser(currentUser ? {...currentUser, nom: e.target.value} : null)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <label htmlFor="edit-prenom">Prénom</label>
+                <Input 
+                  id="edit-prenom" 
+                  value={currentUser?.prenom || ""} 
+                  onChange={e => setCurrentUser(currentUser ? {...currentUser, prenom: e.target.value} : null)}
                 />
               </div>
               <div className="grid gap-2">
@@ -267,6 +326,30 @@ const Users = () => {
                   type="email" 
                   value={currentUser?.email} 
                   onChange={e => setCurrentUser(currentUser ? {...currentUser, email: e.target.value} : null)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <label htmlFor="edit-telephone">Téléphone</label>
+                <Input 
+                  id="edit-telephone" 
+                  value={currentUser?.telephone || ""} 
+                  onChange={e => setCurrentUser(currentUser ? {...currentUser, telephone: e.target.value} : null)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <label htmlFor="edit-address">Adresse</label>
+                <Input 
+                  id="edit-address" 
+                  value={currentUser?.address || ""} 
+                  onChange={e => setCurrentUser(currentUser ? {...currentUser, address: e.target.value} : null)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <label htmlFor="edit-ville">Ville</label>
+                <Input 
+                  id="edit-ville" 
+                  value={currentUser?.ville || ""} 
+                  onChange={e => setCurrentUser(currentUser ? {...currentUser, ville: e.target.value} : null)}
                 />
               </div>
               <div className="grid gap-2">
